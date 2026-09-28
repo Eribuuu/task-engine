@@ -1,4 +1,5 @@
-from task import Task
+from task import Task, Status
+from datetime import datetime, time
 import json
 
 class Tracker:
@@ -8,8 +9,10 @@ class Tracker:
         
     def add_task(self):
         task_name = input("Name of task: ")
-        task_time = input("Time: ")
-        new_task = Task(task_name, task_time, False)
+        print("Time: ")
+        time_hour = input("Hour: ")
+        time_minute = input("Minute: " )
+        new_task = Task(task_name, self.set_due(int(time_hour), int(time_minute)), Status.TODO)
         self._tasklist.append(new_task)
         
     def edit_task(self):
@@ -28,15 +31,16 @@ class Tracker:
             new_name = input("New Name:    (If same name, press enter): ")
             if new_name != "":
                 self._tasklist[task_choice].name = new_name
-            new_time = input("New Time:    (If same time, press enter): ")
-            if new_time != "":
-                self._tasklist[task_choice].time = new_time
-            new_status = input("Status:    (If unchanged, press enter): ")
-            if new_status != "":
-                self._tasklist[task_choice].status = new_status
+            new_due = input("New Due Time:    (If same time, press enter): ")
+            if new_due != "":
+                self._tasklist[task_choice].due = self.set_due(*map(int, new_due.split(":")))
+            self._tasklist[task_choice].status = self.set_status()
+            
             print(f"Edited Task: {self._tasklist[task_choice]}")
-        except:
+        except ValueError:
             print("Must be a valid choice")
+        except TypeError:
+            print("Must be a valid time")
         finally:
             return
         
@@ -76,12 +80,31 @@ class Tracker:
             with open("save.json") as file:
                 saved_list = json.load(file)
                 for task in saved_list:
-                    curr_task = Task(task["name"], task["time"], task["status"])
+                    curr_task = Task(task["name"], task["time"], Status(task["status"]))
                     self._tasklist.append(curr_task)
                 print("Tasks loaded into task tracker")
         except Exception as error :
             print(f"An error has occured: {error}")
             
+    def set_status(self):
+        print("Statuses:\n1. To-Do\n2. In-Progress\n3. Done")
+        selection = input()
+        valid_choice = False
+        status = {1: Status.TODO, 2: Status.IN_PROGRESS, 3: Status.DONE}
+        while valid_choice is False:
+            try:
+                int_selection = int(selection)
+                if int_selection < 1 or int_selection > 3:
+                    raise ValueError("Must be a valid choice")
+                valid_choice = True
+                return status[int_selection]
+            except ValueError as e:
+                print(e)
+                
+    def set_due(self, hour, minute) -> time:
+        new_time = time(hour, minute)
+        return new_time
+                    
     def menu(self):
         while True:
                 print("Task Tracker")

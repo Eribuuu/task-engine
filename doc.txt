@@ -1,0 +1,17 @@
+This weeks tasks: Simple CLI To-do list
+
+9/16/2026:
+Got the basic CRUD functionality done for the task tracker
+Able to add, read, update, delete tasks
+What needs to get done:
+- Move tracker logic to its own class/file
+- Create persistant storage for application
+
+9/17/2026
+Moved the tracker logic to its seperate file
+Implemented a save function that saves to file (makes each task a json)
+What needs to get done:
+- fix save function (want to add a method to turn a task into a dictionary for json dumps)
+- need to fix loads function
+- Get all basic functiionality then focus on data typing and check edge cases
+- after will write tests

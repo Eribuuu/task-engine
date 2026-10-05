@@ -1,3 +1,4 @@
+import uuid
 from enum import StrEnum
 from datetime import time
 from serialization import parse_due
@@ -8,10 +9,20 @@ class Status(StrEnum):
     DONE = "Done"
     
 class Task:
-    def __init__(self, name: str, due_at, status: Status = Status.TODO):
+    def __init__(self, name: str, due_at, task_id = None, status: Status = Status.TODO):
+        if task_id is None:
+            self._task_id = uuid.uuid4()
+        else:
+            if not isinstance(task_id, uuid.UUID):
+                raise TypeError("task_id must be of uuid type")
+            self._task_id = task_id
         self.name = name
         self.due = due_at
         self.status = status
+    
+    @property
+    def id(self):
+        return self._task_id
     
     @property
     def name(self):
@@ -58,12 +69,13 @@ class Task:
         return f"Name: {self.name}| Due at: {self.due}| Status: {self.status}"
     
     def to_dict(self):
-        task_dict = {"name" : self.name, "due": self.due.strftime("%H:%M"), "status": self.status.value}
+        task_dict = {"id": str(self.id), "name" : self.name, "due": self.due.strftime("%H:%M"), "status": self.status.value}
         return task_dict
     
     @classmethod
     def from_dict(cls, task_dict):
-            name = task_dict["name"]
-            due = parse_due(task_dict["due"])
-            status = Status(task_dict["status"])
-            return cls(name, due, status)
+        id = uuid.UUID(task_dict["id"])
+        name = task_dict["name"]
+        due = parse_due(task_dict["due"])
+        status = Status(task_dict["status"])
+        return cls(name, due, id, status)

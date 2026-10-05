@@ -3,7 +3,7 @@ from task import Task, Status
 import pytest
 #Test Each setter and property
 #Test task
-test_task = Task("Test", time(10, 30), Status.TODO)
+test_task = Task("Test", time(10, 30), None, Status.TODO)
 #Name Getter
 def test_name_getter():
     assert test_task.name == "Test" 
@@ -65,7 +65,7 @@ def test_status_wrong_type():
 
 #Create Dictionary from task object
 def test_to_dictionary():
-    new_task = Task("Test", time(10, 30), Status.TODO)
+    new_task = Task("Test", time(10, 30), None, Status.TODO)
     test_dict = new_task.to_dict()
     assert test_dict["name"] == "Test"
     assert test_dict["due"] == "10:30"
@@ -73,7 +73,7 @@ def test_to_dictionary():
 
 #Create task object from dictionary
 def test_from_dictionary():
-    new_task = Task("Test", time(10, 30), Status.TODO)
+    new_task = Task("Test", time(10, 30), None, Status.TODO)
     test_dict = new_task.to_dict()
     recreated_task = Task.from_dict(test_dict)
     assert recreated_task.name == new_task.name

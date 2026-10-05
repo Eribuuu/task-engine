@@ -10,3 +10,7 @@ __pycache__/
 
 # Local app data
 save.json
+
+# Claude skills and behavior\
+CLAUDE.md
+

@@ -48,3 +48,14 @@ What needs to be done:
 - Once tests are all written, will make commit
 - If all tests pass, moving to FastAPI phase
 - Will worry about CLI later, maybe a different UI path when I get the web portion done
+
+9/28/2026
+Added a task id to the task class
+Made a repo for this on github
+Made another commit
+In a semi working state, still fragile with inputs
+What needs to be done:
+- Write tests for task_id
+- Need to fix from_dict
+- Need to handle bad input for task id
+- Need to add type hints 
